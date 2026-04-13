@@ -1,19 +1,30 @@
-const regler = document.getElementById("hoehenregler");
-const anzeige = document.getElementById("hoehenwert");
+const regler1 = document.getElementById("hoehenregler1");
+const regler2 = document.getElementById("personenregler2");
+const anzeige1 = document.getElementById("hoehenwert");
+const anzeige2 = document.getElementById("personenwert")
+
+let einwirkung = 2943
 
 const svg = document.getElementById("fachwerk");
 
 
-  regler.addEventListener("input", function() {
-    anzeige.textContent = regler.value + " m";
+  regler1.addEventListener("input", function() {
+    anzeige1.textContent = regler1.value + " m";
     const ergebnisse = zeichneFachwerk();
     fülltabelle(ergebnisse);
   });
 
+  regler2.addEventListener("input", function() {
+    anzeige2.textContent = regler2.value
+    einwirkung = 80 * regler2.value * 9.81
+    const ergebnisse = zeichneFachwerk()
+    fülltabelle(ergebnisse)
+  })
+
 
   const ergebnisse = zeichneFachwerk();
   fülltabelle(ergebnisse);
-
+  
 
   function zeichneLinie(x1, x2, y1, y2, kraft, maxKraft) {
 
@@ -55,9 +66,9 @@ const svg = document.getElementById("fachwerk");
 
     svg.innerHTML = "";
 
-    const hPixel = Number(regler.value) * 50;
-    const hMeter = Number(regler.value);
-    const F = 2943;
+    const hPixel = Number(regler1.value) * 50;
+    const hMeter = Number(regler1.value);
+    const F = einwirkung;
     const l = 4 
     const alpha = Math.atan((2 * hMeter) / l);
 
@@ -88,7 +99,7 @@ const svg = document.getElementById("fachwerk");
       { x1: 662.5, x2: 750, y1: 275 - hPixel, y2: 275, kraft: S1 },  // 15 
     ]
 
-    const maxKraft = 5000;
+    const maxKraft = einwirkung / Math.tan(Math.atan(2 * 1 / 4));
 
     const ergebnisse = stäbe.map(function(stab)  {
       return zeichneLinie(stab.x1, stab.x2, stab.y1, stab.y2, stab.kraft, maxKraft);
