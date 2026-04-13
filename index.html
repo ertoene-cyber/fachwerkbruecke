@@ -21,6 +21,8 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
             }
 
             #zeichenflaeche {
@@ -66,9 +68,13 @@
         <h1>Warren-Fachwerkbrücke – Stabkräfte</h1>
 
         <div id="steuerung">
-            <label for="hoehenregler">Höhe des Fachwerks:</label>
-            <input type="range" id="hoehenregler" min="1" max="5" value="3.5" step="0.1">
+            <label for="hoehenregle1">Höhe des Fachwerks:</label>
+            <input type="range" id="hoehenregler1" min="1" max="5" value="3.5" step="0.1">
             <span id="hoehenwert">3.5 m</span>
+
+            <label for="personenregler2">Personenanzahl</label>
+            <input type="range" id="personenregler2" min="1" max="20" value="4" step="1">
+            <span id="personenwert">4</span>
         </div>
 
         <div id="zeichenflaeche">
