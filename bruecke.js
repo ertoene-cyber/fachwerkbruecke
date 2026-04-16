@@ -107,7 +107,7 @@ const svg = document.getElementById("fachwerk");
 
     zeichneKnoten(50, 275, "I", -25, 5)
     zeichneKnoten(225, 275, "III", -8, 20)
-    zeichneKnoten(400, 275, "V", -8, 20)
+    zeichneKnoten(400, 275, "V", -7, 20)
     zeichneKnoten(575, 275, "VII", -8, 20)
     zeichneKnoten(750, 275, "IX", 10, 5)
     
@@ -115,6 +115,8 @@ const svg = document.getElementById("fachwerk");
     zeichneKnoten(312.5, 275 - hPixel, "IV", -10, -8)
     zeichneKnoten(487.5, 275 - hPixel, "VI", -10, -8)
     zeichneKnoten(662.5, 275 - hPixel, "VIII", -20, -8)
+
+    zeichnePfeil(400, 275, 400, 325)
 
     return ergebnisse
   }
@@ -176,3 +178,24 @@ const svg = document.getElementById("fachwerk");
   }
 
 
+  function zeichnePfeil(x1, y1, x2, y2) {
+
+    const pfeil = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+    pfeil.setAttribute("x1", x1);
+    pfeil.setAttribute("y1", y1);
+    pfeil.setAttribute("x2", x2);
+    pfeil.setAttribute("y2", y2);
+    pfeil.setAttribute("stroke", "red");
+    pfeil.setAttribute("stroke-width", 2)
+
+    svg.appendChild(pfeil)
+
+    const spitze = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+
+    spitze.setAttribute("points", `${x2-4},${y2} ${x2+4},${y2} ${x2},${y2+10}`);
+    spitze.setAttribute("fill", "red")
+
+    svg.appendChild(spitze)
+    
+  }
