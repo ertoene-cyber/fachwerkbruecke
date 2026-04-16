@@ -17,8 +17,8 @@ const svg = document.getElementById("fachwerk");
 
   regler2.addEventListener("input", function() {
     anzeige2.textContent = regler2.value
-    einwirkungWert.textContent = einwirkung.toFixed(1) + " N"
     einwirkung = 80 * regler2.value * 9.81
+    einwirkungWert.textContent = einwirkung.toFixed(1) + " N"
     const ergebnisse = zeichneFachwerk()
     fülltabelle(ergebnisse)
   })
@@ -138,6 +138,9 @@ const svg = document.getElementById("fachwerk");
 
     svg.setAttribute("height", pfeilende + 20);
 
+    zeichneFestlager(50, 275);
+    zeichneLoslager(750, 275);
+
     return ergebnisse
   }
 
@@ -232,3 +235,72 @@ const svg = document.getElementById("fachwerk");
     svg.appendChild(beschriftungF);
     
   }
+
+  function zeichneFestlager(x, y) {
+
+    const dreieck = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+
+    dreieck.setAttribute("points", `${x},${y} ${x-10}, ${y+20} ${x+10}, ${y+20}`);
+    dreieck.setAttribute("fill", "none");
+    dreieck.setAttribute("stroke", "black");
+    dreieck.setAttribute("stroke-width", 1)
+
+    svg.appendChild(dreieck);
+
+    const linieLager = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+    linieLager.setAttribute("x1", x - 15);
+    linieLager.setAttribute("y1", y + 20);
+    linieLager.setAttribute("x2", x + 15);
+    linieLager.setAttribute("y2", y + 20);
+    linieLager.setAttribute("stroke", "black");
+    linieLager.setAttribute("stroke-width", 2);
+
+    svg.appendChild(linieLager);
+
+  }
+
+
+  function zeichneLoslager (x, y) {
+
+    const dreieck = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+
+    dreieck.setAttribute("points", `${x},${y} ${x-10}, ${y+20} ${x+10}, ${y+20}`);
+    dreieck.setAttribute("fill", "none");
+    dreieck.setAttribute("stroke", "black");
+    dreieck.setAttribute("stroke-width", 1)
+
+    svg.appendChild(dreieck);
+
+    const kreisL = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+    kreisL.setAttribute("cx", x-7);
+    kreisL.setAttribute("cy", y+23);
+    kreisL.setAttribute("r", 3);
+    kreisL.setAttribute("fill", "none");
+    kreisL.setAttribute("stroke", "black");
+
+    svg.appendChild(kreisL);
+
+    const kreisM = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+    kreisM.setAttribute("cx", x);
+    kreisM.setAttribute("cy", y+23);
+    kreisM.setAttribute("r", 3);
+    kreisM.setAttribute("fill", "none");
+    kreisM.setAttribute("stroke", "black");
+
+    svg.appendChild(kreisM);
+
+    const kreisR = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+    kreisR.setAttribute("cx", x+7);
+    kreisR.setAttribute("cy", y+23);
+    kreisR.setAttribute("r", 3);
+    kreisR.setAttribute("fill", "none");
+    kreisR.setAttribute("stroke", "black");
+
+    svg.appendChild(kreisR);
+
+  }
+  
