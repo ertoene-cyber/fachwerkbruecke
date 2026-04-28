@@ -1,8 +1,12 @@
 const regler1 = document.getElementById("hoehenregler1");
 const regler2 = document.getElementById("personenregler2");
+const regler3 = document.getElementById("basisregler3");
+
 const anzeige1 = document.getElementById("hoehenwert");
 const anzeige2 = document.getElementById("personenwert")
-const einwirkungWert = document.getElementById("einwirkungWert")
+const anzeige3 = document.getElementById("basiswert");
+
+const einwirkungWert = document.getElementById("einwirkungWert");
 
 let einwirkung = 3139.2
 
@@ -23,12 +27,18 @@ const svg = document.getElementById("fachwerk");
     fülltabelle(ergebnisse)
   })
 
+  regler3.addEventListener("input", function() {
+    anzeige3.textContent = regler3.value + " m";
+    const ergebnisse = zeichneFachwerk();
+    fülltabelle(ergebnisse);
+  })
+
 
   const ergebnisse = zeichneFachwerk();
   fülltabelle(ergebnisse);
   
 
-  function zeichneLinie(x1, x2, y1, y2, kraft, nummer, dx, dy, maxKraft, beschriftungStäbeGröße) {
+  function zeichneLinie(x1, x2, y1, y2, kraft, nummer, dx, dy, maxKraft, beschriftungStäbeGröße, längeBasis) {
 
     const linie = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
@@ -59,18 +69,20 @@ const svg = document.getElementById("fachwerk");
 
     svg.appendChild(linie);
 
-    const beschriftungStab = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    if (längeBasis >= 2.5 * (175/4)) {
+      const beschriftungStab = document.createElementNS("http://www.w3.org/2000/svg", "text");
 
-    const mitteX = (x1 + x2) / 2
-    const mitteY = (y1 + y2) / 2
+      const mitteX = (x1 + x2) / 2
+      const mitteY = (y1 + y2) / 2
 
-    beschriftungStab.setAttribute("x", mitteX + dx);
-    beschriftungStab.setAttribute("y", mitteY + dy);
-    beschriftungStab.textContent = nummer;
-    beschriftungStab.setAttribute("font-size", beschriftungStäbeGröße);
-    beschriftungStab.setAttribute("font-weight", 20);
+      beschriftungStab.setAttribute("x", mitteX + dx);
+      beschriftungStab.setAttribute("y", mitteY + dy);
+      beschriftungStab.textContent = nummer;
+      beschriftungStab.setAttribute("font-size", beschriftungStäbeGröße);
+      beschriftungStab.setAttribute("font-weight", 20);
 
-    svg.appendChild(beschriftungStab);
+      svg.appendChild(beschriftungStab);
+    } 
 
     return  {kraft: kraft, knicklast: fKrit}
 
@@ -83,8 +95,12 @@ const svg = document.getElementById("fachwerk");
 
     const hPixel = Number(regler1.value) * 50;
     const hMeter = Number(regler1.value);
+    const längeBasis = regler3.value * (175/4);
+
+    const startX = (Math.max(800, 50 + 4*längeBasis) - 4*längeBasis) / 2;
+
     const F = einwirkung;
-    const l = 4;
+    const l = regler3.value;
     const alpha = Math.atan((2 * hMeter) / l);
 
     const beschriftungStäbeGröße = Math.min(7.5 + hPixel * 0.05, 16.25);
@@ -99,47 +115,50 @@ const svg = document.getElementById("fachwerk");
     const S8 = -2 * F / (Math.tan(alpha));
 
     const stäbe = [ 
-      { x1: 50, x2: 137.5, y1: 275, y2: 275 - hPixel, kraft: S1, nummer: 1, dx: -20, dy: 0 },  // 1 
-      { x1: 50, x2: 225, y1: 275, y2: 275, kraft: S2, nummer: 2, dx: 0, dy: 20 },   // 2
-      { x1: 137.5, x2: 225, y1: 275 - hPixel, y2: 275, kraft: S3, nummer: 3, dx: 10, dy: 0 },  // 3
-      { x1: 137.5, x2: 312.5, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S4, nummer: 4, dx: 0, dy: -10 },   // 4
-      { x1: 225, x2: 312.5, y1: 275, y2: 275 - hPixel, kraft: S5, nummer: 5, dx: -20, dy: 0 },  // 5
-      { x1: 225, x2: 400, y1: 275, y2: 275, kraft: S6, nummer: 6, dx: 0, dy: 20 },  // 6
-      { x1: 312.5, x2: 400, y1: 275 - hPixel, y2: 275, kraft: S7, nummer: 7, dx: 10, dy: 0 },  // 7
-      { x1: 312.5, x2: 487.5, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S8, nummer: 8, dx: 0, dy: -10 },  // 8
-      { x1: 400, x2: 487.5, y1: 275, y2: 275 - hPixel, kraft: S7, nummer: 9, dx: -20, dy: 0 },  // 9
-      { x1: 400, x2: 575, y1: 275, y2: 275, kraft: S6, nummer: 10, dx: 0, dy: 20 },   // 10
-      { x1: 487.5, x2: 575, y1: 275 - hPixel, y2: 275, kraft: S5, nummer: 11, dx: 10, dy: 0 },  // 11
-      { x1: 487.5, x2: 662.5, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S4, nummer: 12, dx: 0, dy: -10 },  // 12
-      { x1: 575, x2: 662.5, y1: 275, y2: 275 - hPixel, kraft: S3, nummer: 13, dx: -25, dy: 0 },  // 13
-      { x1: 575, x2: 750, y1: 275, y2: 275, kraft: S2, nummer: 14, dx: 0, dy: 20 },  // 14
-      { x1: 662.5, x2: 750, y1: 275 - hPixel, y2: 275, kraft: S1, nummer: 15, dx: 10, dy: 0 },  // 15 
+      { x1: startX, x2: startX + 0.5*längeBasis, y1: 275, y2: 275 - hPixel, kraft: S1, nummer: 1, dx: -20, dy: 0 },  // 1 
+      { x1: startX, x2: startX + 1*längeBasis, y1: 275, y2: 275, kraft: S2, nummer: 2, dx: 0, dy: 20 },   // 2
+      { x1: startX + 0.5*längeBasis, x2: startX + 1*längeBasis, y1: 275 - hPixel, y2: 275, kraft: S3, nummer: 3, dx: 10, dy: 0 },  // 3
+      { x1: startX + 0.5*längeBasis, x2: startX + 1.5*längeBasis, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S4, nummer: 4, dx: 0, dy: -10 },   // 4
+      { x1: startX + 1*längeBasis, x2: startX + 1.5*längeBasis, y1: 275, y2: 275 - hPixel, kraft: S5, nummer: 5, dx: -20, dy: 0 },  // 5
+      { x1: startX + 1*längeBasis, x2: startX + 2*längeBasis, y1: 275, y2: 275, kraft: S6, nummer: 6, dx: 0, dy: 20 },  // 6
+      { x1: startX + 1.5*längeBasis, x2: startX + 2*längeBasis, y1: 275 - hPixel, y2: 275, kraft: S7, nummer: 7, dx: 10, dy: 0 },  // 7
+      { x1: startX + 1.5*längeBasis, x2: startX + 2.5*längeBasis, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S8, nummer: 8, dx: 0, dy: -10 },  // 8
+      { x1: startX + 2*längeBasis, x2: startX + 2.5*längeBasis, y1: 275, y2: 275 - hPixel, kraft: S7, nummer: 9, dx: -20, dy: 0 },  // 9
+      { x1: startX + 2*längeBasis, x2: startX + 3*längeBasis, y1: 275, y2: 275, kraft: S6, nummer: 10, dx: 0, dy: 20 },   // 10
+      { x1: startX + 2.5*längeBasis, x2: startX + 3*längeBasis, y1: 275 - hPixel, y2: 275, kraft: S5, nummer: 11, dx: 10, dy: 0 },  // 11
+      { x1: startX + 2.5*längeBasis, x2: startX + 3.5*längeBasis, y1: 275 - hPixel, y2: 275 - hPixel, kraft: S4, nummer: 12, dx: 0, dy: -10 },  // 12
+      { x1: startX + 3*längeBasis, x2: startX + 3.5*längeBasis, y1: 275, y2: 275 - hPixel, kraft: S3, nummer: 13, dx: -25, dy: 0 },  // 13
+      { x1: startX + 3*längeBasis, x2: startX + 4*längeBasis, y1: 275, y2: 275, kraft: S2, nummer: 14, dx: 0, dy: 20 },  // 14
+      { x1: startX + 3.5*längeBasis, x2: startX + 4*längeBasis, y1: 275 - hPixel, y2: 275, kraft: S1, nummer: 15, dx: 10, dy: 0 },  // 15 
     ]
 
     const maxKraft = 0.9*einwirkung / Math.tan(Math.atan(2 * 1 / 4));
 
     const ergebnisse = stäbe.map(function(stab)  {
-      return zeichneLinie(stab.x1, stab.x2, stab.y1, stab.y2, stab.kraft, stab.nummer, stab.dx, stab.dy, maxKraft, beschriftungStäbeGröße);
+      return zeichneLinie(stab.x1, stab.x2, stab.y1, stab.y2, stab.kraft, stab.nummer, stab.dx, stab.dy, maxKraft, beschriftungStäbeGröße, längeBasis);
     });
 
-    zeichneKnoten(50, 275, "I", -25, 5)
-    zeichneKnoten(225, 275, "III", -8, 20)
-    zeichneKnoten(400, 275, "V", -6.4, -10 - 0.1*hPixel)
-    zeichneKnoten(575, 275, "VII", -8, 20)
-    zeichneKnoten(750, 275, "IX", 10, 5)
+    zeichneKnoten(startX, 275, "I", -25, 5)
+    zeichneKnoten(startX + 1*längeBasis, 275, "III", -8, 20)
+
+    zeichneKnoten(startX + 2*längeBasis, 275, längeBasis >= 2.5*(175/4) ? "V" : "", -6.4, -10 - 0.1*hPixel)
+
+    zeichneKnoten(startX + 3*längeBasis, 275, "VII", -8, 20)
+    zeichneKnoten(startX + 4*längeBasis, 275, "IX", 10, 5)
     
-    zeichneKnoten(137.5, 275 - hPixel, "II", -10, -8)
-    zeichneKnoten(312.5, 275 - hPixel, "IV", -10, -8)
-    zeichneKnoten(487.5, 275 - hPixel, "VI", -10, -8)
-    zeichneKnoten(662.5, 275 - hPixel, "VIII", -20, -8)
+    zeichneKnoten(startX + 0.5*längeBasis, 275 - hPixel, "II", -10, -8)
+    zeichneKnoten(startX + 1.5*längeBasis, 275 - hPixel, "IV", -10, -8)
+    zeichneKnoten(startX + 2.5*längeBasis, 275 - hPixel, "VI", -10, -8)
+    zeichneKnoten(startX + 3.5*längeBasis, 275 - hPixel, "VIII", -20, -8)
 
     const pfeilende = 275 + einwirkung*0.01
-    zeichnePfeil(400, 275, 400, pfeilende)
+    zeichnePfeil(startX + 2*längeBasis, 275, startX + 2*längeBasis, pfeilende)
 
     svg.setAttribute("height", pfeilende + 20);
+    svg.setAttribute("width", Math.max(800, startX + 4*längeBasis));
 
-    zeichneFestlager(50, 275);
-    zeichneLoslager(750, 275);
+    zeichneFestlager(startX, 275);
+    zeichneLoslager(startX + 4*längeBasis, 275);
 
     return ergebnisse
   }
