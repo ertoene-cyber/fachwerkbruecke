@@ -25,12 +25,23 @@
             gap: 20px;
             }
 
+            #steuerung2 {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            }
+
             #zeichenflaeche {
             background: white;
             border-radius: 8px;
             padding: 10px;
             text-align: center;
             margin-bottom: 20px;
+            overflow-x: auto;
             }
 
             #anzeigeEinwirkung {
@@ -80,14 +91,20 @@
             <input type="range" id="hoehenregler1" min="1" max="5" value="3.5" step="0.1">
             <span id="hoehenwert">3.5 m</span>
 
-            <label for="personenregler2">Personenanzahl</label>
-            <input type="range" id="personenregler2" min="1" max="20" value="4" step="1">
-            <span id="personenwert">4</span>
+            <label for="basisregle3">Basislänge der Dreicke:</label>
+            <input type="range" id="basisregler3" min="1" max="4" value="4" step="0.1">
+            <span id="basiswert">4 m</span>
         </div>
 
         <div id="zeichenflaeche">
-            <svg id="fachwerk" width="800" height="350£">
+            <svg id="fachwerk" width="800" height="350">
             </svg>
+        </div>
+
+        <div id="steuerung2">
+            <label for="personenregler2">Personenanzahl</label>
+            <input type="range" id="personenregler2" min="1" max="20" value="4" step="1">
+            <span id="personenwert">4</span>
         </div>
 
         <div id="anzeigeEinwirkung">
